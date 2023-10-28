@@ -135,6 +135,48 @@ class _InputState extends State<Input> {
           ),
         );
 
+    final textField = TextField(
+      enabled: widget.options.enabled,
+      autocorrect: widget.options.autocorrect,
+      autofocus: widget.options.autofocus,
+      enableSuggestions: widget.options.enableSuggestions,
+      controller: _textController,
+      cursorColor: InheritedChatTheme.of(context)
+          .theme
+          .inputTextCursorColor,
+      decoration: InheritedChatTheme.of(context)
+          .theme
+          .inputTextDecoration
+          .copyWith(
+        hintStyle: InheritedChatTheme.of(context)
+            .theme
+            .inputTextStyle
+            .copyWith(
+          color: InheritedChatTheme.of(context)
+              .theme
+              .inputTextColor
+              .withOpacity(0.5),
+        ),
+        hintText:
+        InheritedL10n.of(context).l10n.inputPlaceholder,
+      ),
+      focusNode: _inputFocusNode,
+      keyboardType: widget.options.keyboardType,
+      maxLines: 5,
+      minLines: 1,
+      onChanged: widget.options.onTextChanged,
+      onTap: widget.options.onTextFieldTap,
+      style: InheritedChatTheme.of(context)
+          .theme
+          .inputTextStyle
+          .copyWith(
+        color: InheritedChatTheme.of(context)
+            .theme
+            .inputTextColor,
+      ),
+      textCapitalization: TextCapitalization.sentences,
+    );
+
     return Focus(
       autofocus: !widget.options.autofocus,
       child: Padding(
@@ -161,47 +203,7 @@ class _InputState extends State<Input> {
                 Expanded(
                   child: Padding(
                     padding: textPadding,
-                    child: TextField(
-                      enabled: widget.options.enabled,
-                      autocorrect: widget.options.autocorrect,
-                      autofocus: widget.options.autofocus,
-                      enableSuggestions: widget.options.enableSuggestions,
-                      controller: _textController,
-                      cursorColor: InheritedChatTheme.of(context)
-                          .theme
-                          .inputTextCursorColor,
-                      decoration: InheritedChatTheme.of(context)
-                          .theme
-                          .inputTextDecoration
-                          .copyWith(
-                            hintStyle: InheritedChatTheme.of(context)
-                                .theme
-                                .inputTextStyle
-                                .copyWith(
-                                  color: InheritedChatTheme.of(context)
-                                      .theme
-                                      .inputTextColor
-                                      .withOpacity(0.5),
-                                ),
-                            hintText:
-                                InheritedL10n.of(context).l10n.inputPlaceholder,
-                          ),
-                      focusNode: _inputFocusNode,
-                      keyboardType: widget.options.keyboardType,
-                      maxLines: 5,
-                      minLines: 1,
-                      onChanged: widget.options.onTextChanged,
-                      onTap: widget.options.onTextFieldTap,
-                      style: InheritedChatTheme.of(context)
-                          .theme
-                          .inputTextStyle
-                          .copyWith(
-                            color: InheritedChatTheme.of(context)
-                                .theme
-                                .inputTextColor,
-                          ),
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
+                    child: Directionality(textDirection: widget.options.rtl? TextDirection.rtl:TextDirection.ltr, child: textField),
                   ),
                 ),
                 ConstrainedBox(
@@ -258,6 +260,7 @@ class InputOptions {
     this.textEditingController,
     this.autocorrect = true,
     this.autofocus = false,
+    this.rtl = false,
     this.enableSuggestions = true,
     this.enabled = true,
   });
@@ -289,6 +292,9 @@ class InputOptions {
 
   /// Controls the [TextInput] autocorrect behavior. Defaults to [true].
   final bool autocorrect;
+
+  /// Enables rtl. Defaults to [false].
+  final bool rtl;
 
   /// Whether [TextInput] should have focus. Defaults to [false].
   final bool autofocus;
